@@ -5,13 +5,13 @@ FROM node:${NODE_VERSION}
 RUN mkdir -p /usr/src/node-red
 
 # User data directory, contains flows, config and nodes.
-RUN mkdir /data
+RUN mkdir /home/data
 
 WORKDIR /usr/src/node-red
 
 # Add node-red user so we aren't running as root.
 RUN useradd --home-dir /usr/src/node-red --no-create-home node-red \
-    && chown -R node-red:node-red /data \
+    && chown -R node-red:node-red /home/data \
     && chown -R node-red:node-red /usr/src/node-red
 
 USER node-red
@@ -25,6 +25,6 @@ EXPOSE 1880
 
 # Environment variable holding file path for flows configuration
 ENV FLOWS=flows.json
-ENV NODE_PATH=/usr/src/node-red/node_modules:/data/node_modules
+ENV NODE_PATH=/usr/src/node-red/node_modules:home/data/node_modules
 
-CMD ["npm", "start", "--", "--userDir", "/data"]
+CMD ["npm", "start", "--", "--userDir", "/home/data"]
